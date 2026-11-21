@@ -1,0 +1,179 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hindi Word Game</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #172554, #6d28d9);
+  color: white;
+  text-align: center;
+  padding: 20px;
+}
+
+.game {
+  max-width: 400px;
+  margin: auto;
+  padding: 20px;
+  background: #ffffff20;
+  border-radius: 20px;
+}
+
+h1 {
+  font-size: 28px;
+}
+
+.word {
+  font-size: 45px;
+  font-weight: bold;
+  background: white;
+  color: purple;
+  padding: 20px;
+  border-radius: 15px;
+  margin: 20px 0;
+}
+
+input {
+  width: 90%;
+  padding: 15px;
+  font-size: 20px;
+  text-align: center;
+  border-radius: 10px;
+  border: none;
+}
+
+button {
+  width: 100%;
+  padding: 15px;
+  margin-top: 12px;
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  background: #fbbf24;
+  cursor: pointer;
+}
+
+.stats {
+  font-size: 20px;
+  margin: 15px;
+}
+
+#message {
+  font-size: 18px;
+  min-height: 25px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="game">
+
+<h1>🇮🇳 Hindi Word Game</h1>
+<p>हिंदी शब्द को Hinglish में लिखो!</p>
+
+<div class="stats">
+  Score: <span id="score">0</span>
+  <br>
+  Time: <span id="time">60</span>
+</div>
+
+<div class="word" id="word">नमस्ते</div>
+
+<input id="answer" placeholder="Hinglish लिखें">
+
+<button onclick="checkAnswer()">Check Answer</button>
+
+<p id="message">गेम शुरू करो!</p>
+
+<button onclick="nextWord()">Next Word</button>
+
+</div>
+
+<script>
+const words = [
+  ["नमस्ते", "namaste"],
+  ["भारत", "bharat"],
+  ["पानी", "paani"],
+  ["दोस्त", "dost"],
+  ["किताब", "kitaab"],
+  ["विद्यालय", "vidyalaya"],
+  ["खेल", "khel"],
+  ["परिवार", "parivaar"],
+  ["माँ", "maa"],
+  ["पिता", "pita"],
+  ["सुंदर", "sundar"],
+  ["सूरज", "suraj"],
+  ["चाँद", "chaand"],
+  ["पेड़", "ped"],
+  ["फूल", "phool"],
+  ["घर", "ghar"],
+  ["खुशी", "khushi"],
+  ["समय", "samay"],
+  ["अच्छा", "achha"],
+  ["धन्यवाद", "dhanyavaad"]
+];
+
+let score = 0;
+let time = 60;
+let current = 0;
+let playing = true;
+
+function nextWord() {
+  current = Math.floor(Math.random() * words.length);
+  document.getElementById("word").innerText = words[current][0];
+  document.getElementById("answer").value = "";
+  document.getElementById("message").innerText = "";
+}
+
+function checkAnswer() {
+  if (!playing) return;
+
+  let answer = document.getElementById("answer").value
+    .trim().toLowerCase();
+
+  let correct = words[current][1];
+
+  if (answer === correct) {
+    score += 10;
+    document.getElementById("score").innerText = score;
+    document.getElementById("message").innerText =
+      "सही जवाब! 🎉 +10 अंक";
+    nextWord();
+  } else {
+    document.getElementById("message").innerText =
+      "गलत! फिर कोशिश करो।";
+  }
+}
+
+document.getElementById("answer").addEventListener("keydown", function(e) {
+  if (e.key === "Enter") {
+    checkAnswer();
+  }
+});
+
+let timer = setInterval(function() {
+  if (!playing) return;
+
+  time--;
+  document.getElementById("time").innerText = time;
+
+  if (time <= 0) {
+    playing = false;
+    clearInterval(timer);
+    document.getElementById("word").innerText = "गेम समाप्त!";
+    document.getElementById("message").innerText =
+      "आपका स्कोर: " + score;
+  }
+}, 1000);
+
+nextWord();
+</script>
+
+</body>
+</html>
